@@ -1,0 +1,6 @@
+@BookCrud.Server_HostAddress = http://localhost:5248
+
+GET {{BookCrud.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
