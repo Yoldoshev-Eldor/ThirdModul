@@ -1,0 +1,6 @@
+@MoveCRUD.Server_HostAddress = http://localhost:5014
+
+GET {{MoveCRUD.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
