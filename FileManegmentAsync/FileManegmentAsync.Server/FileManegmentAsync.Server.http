@@ -1,0 +1,6 @@
+@FileManegmentAsync.Server_HostAddress = http://localhost:5217
+
+GET {{FileManegmentAsync.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
