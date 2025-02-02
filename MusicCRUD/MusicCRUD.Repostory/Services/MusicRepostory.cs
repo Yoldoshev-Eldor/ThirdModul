@@ -1,65 +1,50 @@
-﻿using MsicCRUD.DataAccess.Entity;
-using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using MsicCRUD.DataAccess.Entity;
 
 namespace MusicCRUD.Repostory.Services;
 
 public class MusicRepostory : IMusicRepostory
 {
-    private readonly string _path;
-    private List<Music> _musics;
-    public MusicRepostory()
+    private readonly MainContext _mainContext;
+
+    public MusicRepostory(MainContext mainContext)
     {
-        _path = Path.Combine(Directory.GetCurrentDirectory(), "Music.json");
-        if(!File.Exists(_path))
-        {
-            File.WriteAllText(_path, "[]");
-        }
-        _musics = GetAllMusic();
+        _mainContext = mainContext;
     }
 
-    public Guid AddMusic(Music music)
+    public async Task<Guid> AddMusicAsync(Music music)
     {
-       _musics.Add(music);
-        SavaData();
+        await _mainContext.Music.AddAsync(music);
+        await _mainContext.SaveChangesAsync();
         return music.Id;
     }
 
-    public void DeleteMusic(Guid id)
+    public async Task DeleteMusicAsync(Guid id)
     {
-        
-        var music = GetMusicById(id);
-        _musics.Remove(music);  
+        var music = await GetMusicByIdAsync(id);
+        _mainContext.Music.Remove(music);
+        _mainContext.SaveChanges();
     }
 
-    public List<Music> GetAllMusic()
+    public Task<List<Music>> GetAllMusicAsync()
     {
-        var list = JsonSerializer.Deserialize<List<Music>>(File.ReadAllText(_path));
-        return list;
+        var getAll =_mainContext.Music.ToListAsync();
+        return getAll;
     }
 
-    public Music GetMusicById(Guid id)
+    public async Task<Music> GetMusicByIdAsync(Guid id)
     {
-        var music = _musics.FirstOrDefault(mc => mc.Id == id);
-
+        var music = await _mainContext.Music.FirstOrDefaultAsync(x => x.Id == id);
         if (music == null)
         {
-            throw new Exception("not found");
+            throw new Exception("muisc not found");
         }
-
         return music;
+
     }
 
-
-    public void UpdateMusic(Music music)
+    public Task UpdateMusicAsync(Music music)
     {
-      var  musicId = GetMusicById(music.Id);
-        var index = _musics.IndexOf(music);
-        _musics[index] = music;
-        SavaData();
-    }
-    private void SavaData()
-    {
-        var jsonFile = JsonSerializer.Serialize(_musics);
-        File.WriteAllText(_path,jsonFile);
+        throw new NotImplementedException();
     }
 }

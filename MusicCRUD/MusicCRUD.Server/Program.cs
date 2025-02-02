@@ -1,4 +1,8 @@
 
+using MsicCRUD.DataAccess.Entity;
+using MusicCRUD.Repostory.Services;
+using MusicCRUD.Service;
+
 namespace MusicCRUD.Server
 {
     public class Program
@@ -12,7 +16,20 @@ namespace MusicCRUD.Server
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            
             builder.Services.AddSwaggerGen();
+
+
+
+            builder.Services.AddScoped<IMusicService, MusicService>();
+            builder.Services.AddScoped<IMusicRepostory, MusicRepostory>();
+            builder.Services.AddSingleton<MainContext>();
+            //builder.Services.AddScoped<IMusicRepostory, MusicRepostoryFile>();
+
+
+
+
+
 
             var app = builder.Build();
 

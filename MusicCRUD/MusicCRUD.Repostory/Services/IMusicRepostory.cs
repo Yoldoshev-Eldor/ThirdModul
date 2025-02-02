@@ -4,9 +4,9 @@ namespace MusicCRUD.Repostory.Services;
 
 public interface IMusicRepostory
 {
-    Guid AddMusic(Music music);
-    void DeleteMusic(Guid id);  
-    void UpdateMusic(Music music);
-    Music GetMusicById(Guid id);
-    List<Music> GetAllMusic();
+    Task<Guid> AddMusicAsync(Music music);
+    Task DeleteMusicAsync(Guid id);
+    Task UpdateMusicAsync(Music music);
+    Task<Music> GetMusicByIdAsync(Guid id);
+    Task<List<Music>> GetAllMusicAsync();
 }

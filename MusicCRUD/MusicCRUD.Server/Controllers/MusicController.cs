@@ -9,69 +9,71 @@ namespace MusicCRUD.Api.Controllers
     public class MusicController : ControllerBase
     {
         private readonly IMusicService _musicService;
-        public MusicController()
+
+        public MusicController(IMusicService musicService)
         {
-            _musicService = new MusicService();
+            _musicService = musicService;
         }
+
         [HttpPost("Add Music")]
-        public Guid AddMusic(MusicDto music)
+        public async Task<Guid> AddMusic(MusicDto music)
         {
-            return _musicService.AddMusic(music);
+            return await _musicService.AddMusicAsync(music);
         }
-        [HttpGet("Get Musics")]
-        public List<MusicDto> GetMusics()
+        [HttpGet("getMusics")]
+        public async Task<List<MusicDto>> GetMusics()
         {
-            return _musicService.GetAllMusic();
+            return await _musicService.GetAllMusicAsync();
         }
-        [HttpPost("Update Music")]
-        public void UpdateMusic(MusicDto music)
+        [HttpPut("updateMusic")]
+        public async Task UpdateMusic(MusicDto music)
         {
-            _musicService.UpdateMusic(music);
+           await _musicService.UpdateMusicAsync(music);
         }
-        [HttpPost("Delete Music")]
-        public void DeleteMusic(Guid id)
+        [HttpDelete("deleteMusic")]
+        public async Task DeleteMusic(Guid id)
         {
-            _musicService.DeleteMusic(id);
+           await _musicService.DeleteMusicAsync(id);
         }
         [HttpGet("GetTotalMusicSizeByAuthor")]
-        public double GetTotalMusicSizeByAuthor(string authorName)
+        public async Task<double> GetTotalMusicSizeByAuthorAsync(string authorName)
         {
-            return _musicService.GetTotalMusicSizeByAuthor(authorName);            
+            return await _musicService.GetTotalMusicSizeByAuthorAsync(authorName);            
         }
         [HttpGet("GetMusicWithLikesInRange")]
-        public List<MusicDto> GetMusicWithLikesInRange(int minLikes, int maxLikes)
+        public async Task<List<MusicDto>> GetMusicWithLikesInRange(int minLikes, int maxLikes)
         {
-            return _musicService.GetMusicWithLikesInRange(minLikes, maxLikes);
+            return await _musicService.GetMusicWithLikesInRangeAsync(minLikes, maxLikes);
         }
         [HttpGet("GetMusicByDescriptionKeyword")]
-        public List<MusicDto> GetMusicByDescriptionKeyword(string keyword)
+        public async Task<List<MusicDto>> GetMusicByDescriptionKeyword(string keyword)
         {
-            return _musicService.GetMusicByDescriptionKeyword(keyword);
+            return await _musicService.GetMusicByDescriptionKeywordAsync(keyword);
         }
         [HttpGet("GetTopMostLikedMusic")]
-        public List<MusicDto> GetTopMostLikedMusic(int count)
+        public async Task<List<MusicDto>> GetTopMostLikedMusic(int count)
         {
-            return _musicService.GetTopMostLikedMusic(count);
+            return await _musicService.GetTopMostLikedMusicAsync(count);
         }
         [HttpGet("GetAllMusicAboveSize")]
-        public List<MusicDto> GetAllMusicAboveSize(double minSize)
+        public async Task<List<MusicDto>> GetAllMusicAboveSize(double minSize)
         {
-            return _musicService.GetAllMusicAboveSize(minSize);
+            return await _musicService.GetAllMusicAboveSizeAsync(minSize);
         }
         [HttpGet("GetMusicByName")]
-        public MusicDto GetMusicByName(string name)
+        public async Task<MusicDto> GetMusicByName(string name)
         {
-            return _musicService.GetMusicByName(name);
+            return await _musicService.GetMusicByNameAsync(name);
         }
         [HttpGet("GetMostLikedMusic")]
-        public MusicDto GetMostLikedMusic()
+        public async Task<MusicDto> GetMostLikedMusic()
         {
-            return _musicService.GetMostLikedMusic();
+            return await _musicService.GetMostLikedMusicAsync();
         }
         [HttpGet("GetAllMusicByAuthorName")]
-        public List<MusicDto> GetAllMusicByAuthorName(string name)
+        public async Task<List<MusicDto>> GetAllMusicByAuthorName(string name)
         {
-            return _musicService.GetAllMusicByAuthorName(name);
+            return await _musicService.GetAllMusicByAuthorNameAsync(name);
         }
     }
 }

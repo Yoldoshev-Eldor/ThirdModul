@@ -7,32 +7,33 @@ namespace MusicCRUD.Service;
 public class MusicService : IMusicService
 {
     private readonly IMusicRepostory _musicRepo;
-    public MusicService()
-    {
-        _musicRepo = new MusicRepostory();
 
-    }
-    public Guid AddMusic(MusicDto music)
+    public MusicService(IMusicRepostory musicRepo)
     {
-        _musicRepo.AddMusic(ConvertToMusicEntity(music));
+        _musicRepo = musicRepo;
+    }
+
+    public async Task<Guid> AddMusicAsync(MusicDto music)
+    {
+        await _musicRepo.AddMusicAsync(ConvertToMusicEntity(music));
         return ConvertToMusicEntity(music).Id;
     }
 
-    public void DeleteMusic(Guid id)
+    public async Task DeleteMusicAsync(Guid id)
     {
-        _musicRepo.DeleteMusic(id);
+        await _musicRepo.DeleteMusicAsync(id);
     }
 
-    public List<MusicDto> GetAllMusic()
+    public async Task<List<MusicDto>> GetAllMusicAsync()
     {
-        var listMusic = _musicRepo.GetAllMusic();
+        var listMusic = await _musicRepo.GetAllMusicAsync();
         var result = listMusic.Select(muz => ConvertToMusicDto(muz)).ToList();
         return result;
     }
 
-    public void UpdateMusic(MusicDto music)
+    public async Task UpdateMusicAsync(MusicDto music)
     {
-        _musicRepo.UpdateMusic(ConvertToMusicEntity(music));
+        await _musicRepo.UpdateMusicAsync(ConvertToMusicEntity(music));
     }
     private Music ConvertToMusicEntity(MusicDto musicDto)
     {
@@ -59,59 +60,67 @@ public class MusicService : IMusicService
         };
     }
 
-    public List<MusicDto> GetAllMusicByAuthorName(string name)
+    public async Task<List<MusicDto>> GetAllMusicByAuthorNameAsync(string name)
     {
-        var list = _musicRepo.GetAllMusic();
-        var result = list.Where(mc => mc.Name == name).ToList();
+        var list = await _musicRepo.GetAllMusicAsync();
+        var result = list.Where(mc => mc.AuthorName == name).ToList();
         var dto = result.Select(ConvertToMusicDto).ToList();
         return dto;
 
     }
 
-    public MusicDto GetMostLikedMusic()
+    public async Task<MusicDto> GetMostLikedMusicAsync()
     {
-        var result = GetAllMusic().Max(mc => mc.QuentityLikes);
-        return GetAllMusic().FirstOrDefault(bk => bk.QuentityLikes == result);
+        var result = await GetAllMusicAsync();
+        var maxx = result.Max(mc => mc.QuentityLikes);
+
+        return result.FirstOrDefault(bk => bk.QuentityLikes == maxx);
     }
 
-    public MusicDto GetMusicByName(string name)
+    public async Task<MusicDto> GetMusicByNameAsync(string name)
     {
-        return GetAllMusic().FirstOrDefault(mc => mc.Name == name);
+        var res = await GetAllMusicAsync();
+        return res.FirstOrDefault(mc => mc.Name == name);
     }
 
-    public List<MusicDto> GetAllMusicAboveSize(double minSize)
+    public async Task<List<MusicDto>> GetAllMusicAboveSizeAsync(double minSize)
     {
-        var result = GetAllMusic().Where(mc => mc.MB > minSize).ToList();
-        return result;
-    }
-
-    public List<MusicDto> GetTopMostLikedMusic(int count)
-    {
-        var result = GetAllMusic().Where(mc => mc.QuentityLikes > count).ToList();
-        return result;
-    }
-
-    public List<MusicDto> GetMusicByDescriptionKeyword(string keyword)
-    {
-        var result = GetAllMusic().Where(mc => mc.Name == keyword).ToList();
-        return result;
-    }
-
-    public List<MusicDto> GetMusicWithLikesInRange(int minLikes, int maxLikes)
-    {
-        var result = GetAllMusic().Where(mc => mc.QuentityLikes > minLikes && 
-        mc.QuentityLikes < maxLikes).ToList();
-        return result;
-    }
-
-    public double GetTotalMusicSizeByAuthor(string authorName)
-    {
-        var result = GetAllMusic().Where(mc => mc.AuthorName == authorName).ToList();
-        var res = result.Sum(mc => mc.MB);
+        var result = await GetAllMusicAsync();
+        var res = result.Where(mc => mc.MB > minSize).ToList();
         return res;
     }
 
-    public List<string> GetAllUniqueAuthors()
+    public async Task<List<MusicDto>> GetTopMostLikedMusicAsync(int count)
+    {
+        var result = await GetAllMusicAsync();
+        var res = result.Where(mc => mc.QuentityLikes > count).ToList();
+        return res;
+    }
+
+    public async Task<List<MusicDto>> GetMusicByDescriptionKeywordAsync(string keyword)
+    {
+        var result = await GetAllMusicAsync();
+        var res = result.Where(mc => mc.Name == keyword).ToList();
+        return res;
+    }
+
+    public async Task<List<MusicDto>> GetMusicWithLikesInRangeAsync(int minLikes, int maxLikes)
+    {
+        var result = await GetAllMusicAsync();
+        var res = result.Where(mc => mc.QuentityLikes > minLikes &&
+     mc.QuentityLikes < maxLikes).ToList();
+        return res;
+    }
+
+    public async Task<double> GetTotalMusicSizeByAuthorAsync(string authorName)
+    {
+        var result = await GetAllMusicAsync();
+        var ress = result.Where(mc => mc.AuthorName == authorName).ToList();
+        var res = ress.Sum(mc => mc.MB);
+        return res;
+    }
+
+    public async Task<List<string>> GetAllUniqueAuthorsAsync()
     {
         throw new NotImplementedException();
     }

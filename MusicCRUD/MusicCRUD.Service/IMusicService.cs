@@ -4,18 +4,18 @@ namespace MusicCRUD.Service;
 
 public interface IMusicService
 {
-    Guid AddMusic(MusicDto music);
-    void DeleteMusic(Guid id);
-    void UpdateMusic (MusicDto music);
-    List<MusicDto> GetAllMusic();
-    List<MusicDto> GetAllMusicByAuthorName(string name);
-    MusicDto GetMostLikedMusic();
-    MusicDto GetMusicByName(string name);
-    List<MusicDto> GetAllMusicAboveSize(double minSize);
-    List<MusicDto> GetTopMostLikedMusic(int count);
-    List<MusicDto> GetMusicByDescriptionKeyword(string keyword);
-    List<MusicDto> GetMusicWithLikesInRange(int minLikes, int maxLikes);
-    List<string> GetAllUniqueAuthors();
-    double GetTotalMusicSizeByAuthor(string authorName);
+    Task<Guid> AddMusicAsync(MusicDto music);
+    Task DeleteMusicAsync(Guid id);
+    Task UpdateMusicAsync (MusicDto music);
+    Task<List<MusicDto>> GetAllMusicAsync();
+    Task<List<MusicDto>> GetAllMusicByAuthorNameAsync(string name);
+    Task<MusicDto> GetMostLikedMusicAsync();
+    Task<MusicDto> GetMusicByNameAsync(string name);
+    Task<List<MusicDto>> GetAllMusicAboveSizeAsync(double minSize);
+    Task<List<MusicDto>> GetTopMostLikedMusicAsync(int count);
+    Task<List<MusicDto>> GetMusicByDescriptionKeywordAsync(string keyword);
+    Task<List<MusicDto>> GetMusicWithLikesInRangeAsync(int minLikes, int maxLikes);
+    Task<List<string>> GetAllUniqueAuthorsAsync();
+    Task<double> GetTotalMusicSizeByAuthorAsync(string authorName);
 
 }
